@@ -1,4 +1,3 @@
-TEST_MODE = False
 import os
 import requests
 from bs4 import BeautifulSoup
@@ -26,7 +25,7 @@ text = soup.get_text(" ", strip=True).lower()
 
 found = [k for k in KEYWORDS if k in text]
 
-if TEST_MODE or found:
+if found:
     message = (
         "🚨🚨 DGS BAŞVURULARI / DUYURUSU! 🚨🚨\n\n"
         "ÖSYM'de 2027 DGS ile ilgili yeni bir içerik tespit edildi.\n\n"
