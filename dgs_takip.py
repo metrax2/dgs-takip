@@ -7,15 +7,12 @@ CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 
 URL = "https://www.osym.gov.tr/"
 
-def telegram(mesaj):
-    requests.post(
-        f"https://api.telegram.org/bot{TOKEN}/sendMessage",
-        data={
-            "chat_id": CHAT_ID,
-            "text": mesaj
-        },
-        timeout=20
-    )
+# Sadece 2027 DGS ile ilgili ifadeleri takip et
+KEYWORDS = [
+    "2027-dgs",
+    "2027 dgs",
+    "2027 dikey geçiş sınavı"
+]
 
 html = requests.get(
     URL,
@@ -26,16 +23,21 @@ html = requests.get(
 soup = BeautifulSoup(html, "html.parser")
 text = soup.get_text(" ", strip=True).lower()
 
-kelimeler = [
-    "2027-dgs",
-    "dgs başvuru",
-    "dgs başvuruları",
-    "dikey geçiş sınavı"
-]
+found = [k for k in KEYWORDS if k in text]
 
-if any(k in text for k in kelimeler):
-    telegram(
-        "🔔 DGS BAŞVURU DUYURUSU!\n\n"
-        "ÖSYM'de DGS ile ilgili yeni bir duyuru tespit edildi.\n\n"
+if found:
+    message = (
+        "🚨🚨 DGS BAŞVURULARI / DUYURUSU! 🚨🚨\n\n"
+        "ÖSYM'de 2027 DGS ile ilgili yeni bir içerik tespit edildi.\n\n"
+        "ÖSYM:\n"
         "https://www.osym.gov.tr/"
+    )
+
+    requests.post(
+        f"https://api.telegram.org/bot{TOKEN}/sendMessage",
+        data={
+            "chat_id": CHAT_ID,
+            "text": message
+        },
+        timeout=20
     )
