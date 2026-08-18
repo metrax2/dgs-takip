@@ -1,4 +1,4 @@
-TEST_MODE = True
+TEST_MODE = False
 import os
 import requests
 from bs4 import BeautifulSoup
